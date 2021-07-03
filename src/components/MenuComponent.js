@@ -1,41 +1,41 @@
-import React, { Component } from 'react'
-import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap'
-import Dishdetail from './DishdetailComponent'
+import { Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem } from "reactstrap";
+import { Link } from 'react-router-dom'
 
-export default class Menu extends Component {
-    constructor(props) {
-        super(props)
+const RenderMenuItem = ({ dish }) => (
+    <Card>
+        <Link to={`/menu/${dish.id}`}>
+            <CardImg width="100%" src={dish.image} alt={dish.name} />
+            <CardImgOverlay className="ml-5">
+                <CardTitle>{dish.name}</CardTitle>
+            </CardImgOverlay>
+        </Link>
+    </Card>
+)
 
-        this.state = {
-            selectedDish: null
-        }
-    }
+const Menu = ({ dishes }) => {
+    const menu = dishes.map(dish =>
+        <div key={dish.id} className="col-12 col-md-5 m-1">
+            <RenderMenuItem dish={dish} />
+        </div>
+    )
 
-    onDishSelect = (dish) => {
-        this.setState({ selectedDish: dish })
-    }
-
-    render() {
-        const menu = this.props.dishes.map(dish =>
-            <div key={dish.id} className="col-12 col-md-5 m-1">
-                <Card onClick={() => this.onDishSelect(dish)}>
-                    <CardImg width="100%" src={dish.image} alt={dish.name} />
-                    <CardImgOverlay className="ml-5">
-                        <CardTitle>{dish.name}</CardTitle>
-                    </CardImgOverlay>
-                </Card>
+    return (
+        <div className="container">
+            <div className="row">
+                <Breadcrumb>
+                    <BreadcrumbItem>
+                        <Link to="/home">Home</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>
+                        Menu
+                    </BreadcrumbItem>
+                </Breadcrumb>
             </div>
-        )
-
-        return (
-            <div>
-                <div className="container">
-                    <div className="row">
-                        {menu}
-                    </div>
-                    <Dishdetail dish={this.state.selectedDish} />
-                </div>
+            <div className="row">
+                {menu}
             </div>
-        )
-    }
+        </div>
+    )
 }
+
+export default Menu
